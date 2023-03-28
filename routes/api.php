@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\TasksController;
-use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,13 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Get All Users
-Route::middleware(['auth:sanctum', 'ability:admin,super-admin'])->get('/users', function (Request $request) {
-    $users = User::orderBy('created_at', 'desc')->get();
-    return response()->json(['success'=>true, 'users'=>$users], 200);
-});
-
 /**Authentication Routes */
+Route::middleware(['auth:sanctum', 'ability:admin,super-admin'])->get('/users', [AuthController::class, 'users']);
 Route::middleware('auth:sanctum')->post('/token/validate', [AuthController::class, 'validateToken']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum', 'ability:admin,super-admin'])->post('/register', [AuthController::class, 'register']);

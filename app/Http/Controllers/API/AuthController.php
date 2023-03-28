@@ -11,6 +11,17 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    public function users(){
+        $users = User::orderBy('created_at', 'desc')->get();
+
+        $response = [
+            'success' => true,
+            'users' => $users
+        ];
+
+        return response()->json($response, 200);
+    }
+
     public function validateToken(Request $request){
         $id = $request->user()->id;
 
