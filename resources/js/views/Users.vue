@@ -340,7 +340,6 @@ export default{
             })
         },
         async showUpdate(user){
-            console.log(user)
             const keys = Object.keys(this.updateUser)
 
             keys.forEach(key => {
