@@ -23,8 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 /**Authentication Routes */
 Route::middleware('auth:sanctum')->post('/token/validate', [AuthController::class, 'validateToken']);
 Route::post('/login', [AuthController::class, 'login']);
-// Route::middleware(['auth:sanctum', 'ability:admin,super-admin'])->post('/register', [AuthController::class, 'register']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::middleware(['auth:sanctum', 'ability:admin,super-admin'])->post('/register', [AuthController::class, 'register']);
 Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
 Route::middleware('auth:sanctum')->post('/resetEmail', [AuthController::class, 'resetEmail']);
 Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
