@@ -39,8 +39,8 @@
             :disabled="isdisabled"
             :id="id"
             :placeholder="placeholderText"
-            :class="[v$.inputData.$error ? 'inner-border-custom-red focus:inner-border-custom-red' : '', `h-[${height}]`]"
-            class="w-full text-[15px] text-custom-gray rounded-[2px]  inner-border-[1px] inner-border-custom-light border-none focus:ring-0 disabled:bg-custom-bg"
+            :class="v$.inputData.$error ? 'inner-border-custom-red focus:inner-border-custom-red' : ''"
+            class="w-full h-[{{ height }}] text-[15px] text-custom-gray rounded-[2px]  inner-border-[1px] inner-border-custom-light border-none focus:ring-0 disabled:bg-custom-bg"
         >
     </div>
 </template>

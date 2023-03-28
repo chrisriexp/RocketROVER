@@ -104,6 +104,7 @@
 
                 <!-- Backend URL -->
                 <a v-if="carriers[errors[selected_error].carrier].backend[source]" target="_blank" :href="carriers[errors[selected_error].carrier].backend[source]+app_id" class="text-[16px] text-custom-blue">Backend Debugging URL</a>
+                <p v-else class="text-[16px] text-custom-orange">{{ carriers[errors[selected_error].carrier].name }} does not have a backend debugging URL</p>
 
                 <!-- Error Desc when reported -->
                 <div>

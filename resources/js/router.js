@@ -1,6 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Home from './views/Home.vue'
 import NotFound from './views/NotFound.vue'
+import Profile from './views/Profile.vue'
+import Users from './views/Users.vue'
 import Dashboard from './views/Dashboard.vue'
 import ReportError from './views/Report_Error.vue'
 import Tasks from './views/Tasks.vue'
@@ -21,6 +23,21 @@ const routes = [
         path: '/report-error',
         name: "ReportError",
         component: ReportError
+    },
+    {
+        path: '/profile',
+        name: "Profile",
+        component: Profile,
+        beforeEnter: validateAccessToken
+    },
+    {
+        path: '/users',
+        name: "Users",
+        component: Users,
+        meta: {
+            admin: true
+        },
+        beforeEnter: validateAccessToken
     },
     {
         path: '/dashboard',
@@ -61,7 +78,16 @@ async function validateAccessToken(to, from, next) {
         if (response.data.valid) {
             to.meta.role = response.data.role;
             to.meta.type = response.data.type;
-            next();
+
+            if(to.meta.admin){
+                if(to.meta.role == 'admin' || to.meta.role == 'super-admin'){
+                    next();
+                } else {
+                    next({ name: "Dashboard" })
+                }
+            }else {
+                next();
+            }
         } else {
             next({ name: "Home" });
         }

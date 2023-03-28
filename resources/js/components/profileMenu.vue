@@ -12,12 +12,12 @@
         </div>
 
         <div v-if="menu" class="z-10 absolute grid w-fit h-fit right-6 mt-16 bg-white rounded-[4px] border-custom-light border-[1px] text-custom-gray">
-            <router-link :to="{name: 'Dashboard'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] rounded-tr-[4px] rounded-tl-[4px] hover:bg-custom-blue hover:text-white">
+            <router-link :to="{name: 'Profile'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] rounded-tr-[4px] rounded-tl-[4px] hover:bg-custom-blue hover:text-white">
                 <UserIcon class="h-[24px] my-auto" />
                 <p class="text-[16px] my-auto">Profile</p>
             </router-link>
 
-            <router-link v-if="role == 'super-admin'" :to="{name: 'AdminUsers'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] hover:bg-custom-blue hover:text-white">
+            <router-link v-if="role == 'super-admin' || role == 'admin'" :to="{name: 'Users'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] hover:bg-custom-blue hover:text-white">
                 <AdjustmentsHorizontalIcon class="h-[24px] my-auto" />
                 <p class="text-[16px] my-auto">Users</p>
             </router-link>

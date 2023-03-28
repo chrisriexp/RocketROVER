@@ -3,6 +3,8 @@
         <div class="h-screen p-4 pb-4 overflow-y-auto bg-white">
             <div class="grid gap-2 h-fit">
                 <img src="../../assets/logo.png" alt="Rocket Automation Logo" class="pb-4 border-b-2 mb-6">
+                <router-link :to="{name: 'Profile'}" :class="active == 'profile' ? 'text-white bg-custom-blue' : ''" class="flex md:hidden gap-4 align-middle font-medium rounded-lg py-2 px-2 hover:bg-custom-gray hover:bg-opacity-10 hover:text-custom-blue"><UserCircleIcon class="h-6 my-auto" />Profile</router-link>
+                <router-link v-if="role == 'super-admin' || role == 'admin'" :to="{name: 'Users'}" :class="active == 'users' ? 'text-white bg-custom-blue' : ''" class="flex md:hidden gap-4 align-middle font-medium rounded-lg py-2 px-2 hover:bg-custom-gray hover:bg-opacity-10 hover:text-custom-blue"><AdjustmentsHorizontalIcon class="h-6 my-auto" />Users</router-link>
                 <router-link :to="{name: 'Dashboard'}" :class="active == 'dashboard' ? 'text-white bg-custom-blue' : ''" class="flex gap-4 align-middle font-medium rounded-lg py-2 px-2 hover:bg-custom-gray hover:bg-opacity-10 hover:text-custom-blue"><Squares2X2Icon class="h-6 my-auto" />Dashboard</router-link>
                 <router-link :to="{name: 'Tasks'}" :class="active == 'tasks' ? 'text-white bg-custom-blue' : ''" class="flex gap-4 align-middle font-medium rounded-lg py-2 px-2 hover:bg-custom-gray hover:bg-opacity-10 hover:text-custom-blue"><ClipboardDocumentListIcon class="h-6 my-auto" />Tasks</router-link>
                 <button @click="logout" class="flex md:hidden gap-4 align-middle font-medium rounded-lg py-2 px-2 hover:bg-custom-gray hover:bg-opacity-10 hover:text-custom-blue"><ArrowLeftOnRectangleIcon class="h-6 my-auto" />Sign Out</button>             
@@ -21,6 +23,7 @@
 
         <div class="w-full grid justify-items-center">
             <p v-if="active == 'profile'" class="text-[24px] font-medium">Profile</p>
+            <p v-if="active == 'users'" class="text-[24px] font-medium">Users</p>
             <p v-else-if="active == 'dashboard'" class="text-[24px] font-medium">Dashboard</p>
             <p v-else-if="active == 'tasks'" class="text-[24px] font-medium">Tasks</p>
         </div>
@@ -34,7 +37,7 @@
 </template>
 
 <script>
-import { HomeIcon, ArrowLeftOnRectangleIcon, UserCircleIcon, Squares2X2Icon, Bars3Icon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
+import { HomeIcon, ArrowLeftOnRectangleIcon, UserCircleIcon, Squares2X2Icon, Bars3Icon, ClipboardDocumentListIcon, AdjustmentsHorizontalIcon } from '@heroicons/vue/24/outline'
 
 export default {
     name: "Nav Bar",
@@ -76,7 +79,8 @@ export default {
         Squares2X2Icon,
         ArrowLeftOnRectangleIcon,
         Bars3Icon,
-        ClipboardDocumentListIcon
+        ClipboardDocumentListIcon,
+        AdjustmentsHorizontalIcon
     }
 }
 </script>

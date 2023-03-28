@@ -175,7 +175,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->user()->email)->first();
 
-        if(Auth::attempt(['email'=> $request->user()->email, 'password'=> $request->password])){
+        if(Auth('web')->attempt(['email'=> $request->user()->email, 'password'=> $request->password])){
             $user->email = strtolower($request->email);
             $user->save();
 
@@ -193,6 +193,63 @@ class AuthController extends Controller
 
             return response()->json($response, 401);
         }
+    }
+
+    public function update(Request $request){
+        if($request->has('password')){
+            $validator = Validator::make($request->all(), [
+                'id'=> 'required',
+                'role'=> 'required',
+                'name'=> 'required',
+                'email'=> 'required|email',
+                'source'=> 'required',
+                'type'=> 'required',
+                'password'=> 'required|min:8',
+                'confirm_password'=> 'required|same:password'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'id'=> 'required',
+                'role'=> 'required',
+                'name'=> 'required',
+                'email'=> 'required|email',
+                'source'=> 'required',
+                'type'=> 'required'
+            ]);
+        }
+
+        if($validator->fails()){
+            $response = [
+                'success'=> false,
+                'message'=> $validator->errors()
+            ];
+
+            return response()->json($response, 400);
+        }
+
+        $user = User::find($request->id);
+
+        if($request->has('password')){
+            $input = $request->all();
+            $input['email'] = strtolower($input['email']);
+            $input['password'] = bcrypt($input['password']);
+
+            $user->fill($input);
+            $user->save();
+        } else {
+            $input = $request->all();
+            $input['email'] = strtolower($input['email']);
+
+            $user->fill($input);
+            $user->save();
+        }
+
+        $response = [
+            'success'=> true,
+            'message'=> 'User updated successfully.'
+        ];
+
+        return response()->json($response, 200);
     }
 
     public function logout(Request $request) {
