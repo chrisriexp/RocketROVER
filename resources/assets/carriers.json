@@ -1,0 +1,100 @@
+{
+    "aon": {
+        "name": "AON Edge",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/aonedge-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/aonedge-api/"
+        }
+    },
+    "beyond": {
+        "name": "Beyond Flood",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/beyond-flood-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/beyond-flood-api/"
+        }
+    },
+    "cat": {
+        "name": "Cat Coverage",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/cat-coverage-api/",
+            "MGA": null
+        }
+    },
+    "dual": {
+        "name": "Dual Flood",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/dual-flood-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/dual-flood-api/"
+        }
+    },
+    "flow": {
+        "name": "Flow Flood",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/flow-flood-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/flow-flood-api/"
+        }
+    },
+    "frs": {
+        "name": "Flood Risk Solutions",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/flood-risk-api/",
+            "MGA": null
+        }
+    },
+    "hippo": {
+        "name": "Hippo",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/hippo-api/",
+            "MGA": null
+        }
+    },
+    "neptune": {
+        "name": "Neptune",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/neptune-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/neptune-api/"
+        }
+    },
+    "palomar": {
+        "name": "Palomar",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/palomar-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/palomar-api/"
+        }
+    },
+    "pmf": {
+        "name": "Private Market Flood",
+        "backend": {
+            "RA": null,
+            "MGA": null
+        }
+    },
+    "sterling": {
+        "name": "Sterling",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/sterling-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/sterling-api/"
+        }
+    },
+    "superior": {
+        "name": "Superior Flood",
+        "backend": {
+            "RA": null,
+            "MGA": null
+        }
+    },
+    "tower": {
+        "name": "Tower Hill",
+        "backend": {
+            "RA": null,
+            "MGA": null
+        }
+    },
+    "wright": {
+        "name": "Wright Flood",
+        "backend": {
+            "RA": null,
+            "MGA": null
+        }
+    }
+}
