@@ -160,14 +160,16 @@ class TasksController extends Controller
             "flow"=> 'API',
             "frs"=> 'BOT',
             "hippo"=> 'API',
+            "johnson"=> 'API',
             "neptune"=> 'API',
             "palomar"=> 'API',
             "pmf"=> 'BOT',
             "sterling"=> 'API',
             "superior"=> 'BOT',
             "tower"=> 'BOT',
-            "wright"=> 'API',
-
+            "wright-resi"=> 'API',
+            "wright-nfip"=> 'API',
+            "wright-hiscox"=> 'API',
         ];
 
         $source = "";

@@ -186,7 +186,6 @@ export default {
     async created(){
         this.role = this.$route.meta.role
         this.type = this.$route.meta.type
-        console.log(this.quickNotifications)
 
         await axios.get('/api/tasks/dashboard')
         .then(response => {

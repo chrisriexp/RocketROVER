@@ -33,13 +33,16 @@
                             <option value="flow">Flow Flood</option>
                             <option v-if="this.form.app_id.includes('RFAA')" value="frs">Flood Risk Solutions</option>
                             <option v-if="this.form.app_id.includes('RFAA')" value="hippo">Hippo</option>
+                            <option value="johnson">Johnson and Johnson</option>
                             <option value="neptune">Neptune</option>
                             <option value="palomar">Palomar</option>
                             <option v-if="this.form.app_id.includes('RFAA')" value="pmf">Private Market Flood</option>
                             <option value="sterling">Sterling</option>
                             <option v-if="this.form.app_id.includes('RFAA')" value="superior">Superior Flood</option>
                             <option v-if="this.form.app_id.includes('RFAA')" value="tower">Tower Hill</option>
-                            <option value="wright">Wright Flood</option>
+                            <option value="wright-resi">Wright - Resi Flood</option>
+                            <option value="wright-nfip">Wright - NFIP</option>
+                            <option value="wright-hiscox">Wright - Hiscox</option>
                         </select>
 
                         <label :for="'desc'+index" class="mt-4 text-[16px] text-custom-light-gray font-medium">Error Description <span class="text-custom-red">*</span></label>

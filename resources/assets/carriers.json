@@ -48,6 +48,13 @@
             "MGA": null
         }
     },
+    "johnson": {
+        "name": "Johnson and Johnson",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/jj-flood-api/",
+            "MGA": null
+        }
+    },
     "neptune": {
         "name": "Neptune",
         "backend": {
@@ -90,11 +97,25 @@
             "MGA": null
         }
     },
-    "wright": {
-        "name": "Wright Flood",
+    "wright-resi": {
+        "name": "Wright - Resi Flood",
         "backend": {
-            "RA": null,
-            "MGA": null
+            "RA": "https://agent.rocketflood.com/backend/api/test/resi-flood-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/resi-flood-api/"
+        }
+    },
+    "wright-nfip": {
+        "name": "Wright - NFIP",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/wright-nfip-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/resi-flood-api/"
+        }
+    },
+    "wright-hiscox": {
+        "name": "Wright - Hiscox",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/test/wright-hiscox-api/",
+            "MGA": "https://backend.agentportal.rocketmga.com/api/test/wright-hiscox-api/"
         }
     }
 }
