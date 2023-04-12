@@ -13,7 +13,7 @@
             <!-- Header -->
             <div class="md:float-left w-fit grid">
                 <h1 class="hidden md:block text-[32px] text-custom-gray font-medium">Tasks</h1>
-                <p class="text-[16px] text-custom-light-gray">Below is a task list of application errors,</p>
+                <p class="text-[16px] text-custom-light-gray">Below is a task list of application errors, <a href="/report-error" class="text-custom-blue underline">report errors here</a></p>
             </div>
 
             <!-- Search Bar -->

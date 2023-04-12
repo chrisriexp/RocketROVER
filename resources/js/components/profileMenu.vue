@@ -17,7 +17,7 @@
                 <p class="text-[16px] my-auto">Profile</p>
             </router-link>
 
-            <router-link v-if="role == 'super-admin' || role == 'admin'" :to="{name: 'Users'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] hover:bg-custom-blue hover:text-white">
+            <router-link v-if="role == 'super-admin'" :to="{name: 'Users'}" class="w-[205px] h-[40px] flex gap-4 px-4 border-b-[1px] hover:bg-custom-blue hover:text-white">
                 <AdjustmentsHorizontalIcon class="h-[24px] my-auto" />
                 <p class="text-[16px] my-auto">Users</p>
             </router-link>
