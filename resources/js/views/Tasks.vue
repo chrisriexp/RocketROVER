@@ -8,11 +8,11 @@
         <loading class="m-auto" />
     </div>
 
-    <div class="sm:ml-64 mt-4 md:mt-[72px] px-4 md:px-10 h-fit w-full md:w-[84%] bg-custom-bg z-10 absolute">
+    <div class="sm:ml-64 mt-20 md:mt-[72px] px-4 md:px-10 h-fit w-full md:w-[84%] bg-custom-bg z-10 absolute">
         <div class="w-full grid mt-6 md:flow-root">
             <!-- Header -->
             <div class="md:float-left w-fit grid">
-                <h1 class="text-[32px] text-custom-gray font-medium">Tasks</h1>
+                <h1 class="hidden md:block text-[32px] text-custom-gray font-medium">Tasks</h1>
                 <p class="text-[16px] text-custom-light-gray">Below is a task list of application errors,</p>
             </div>
 
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Task Status Selection -->
-        <div class="w-full h-fit md:h-[48px] grid md:grid-cols-4 gap-[4px] mt-4 md:mt-8 p-[4px] bg-custom-light rounded-[4px] text-center text-[14px] font-medium">
+        <div class="w-full h-fit md:h-[48px] grid md:grid-cols-5 gap-[4px] mt-4 md:mt-8 p-[4px] bg-custom-light rounded-[4px] text-center text-[14px] font-medium">
             <div @click="changeView('debug')" :class="view == 'debug'? 'bg-custom-blue text-white' : 'bg-white text-custom-gray'" class="grid h-[40px] rounded-[4px] cursor-pointer">
                 <p class="m-auto">Debugging</p>
             </div>
@@ -37,12 +37,16 @@
                 <p class="m-auto">Testing</p>
             </div>
 
+            <div @click="changeView('digiprompt')" :class="view == 'digiprompt'? 'bg-custom-blue text-white' : 'bg-white text-custom-gray'" class="grid h-[40px] rounded-[4px] cursor-pointer">
+                <p class="m-auto">DigiPrompt Queue</p>
+            </div>
+
             <div @click="changeView('fixed')" :class="view == 'fixed'? 'bg-custom-blue text-white' : 'bg-white text-custom-gray'" class="grid h-[40px] rounded-[4px] cursor-pointer">
                 <p class="m-auto">Fixed</p>
             </div>
         </div>
 
-        <normal v-if="view == 'debug' || view == 'update' || view == 'fixed' && setup" :tasks="filterView" />
+        <normal v-if="view == 'debug' || view == 'update' || view == 'digiprompt' || view == 'fixed' && setup" :tasks="filterView" />
         <test v-else-if="view == 'test' && setup" :tasks="filterView" />
     </div>
 </template>

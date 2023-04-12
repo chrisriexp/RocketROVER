@@ -32,6 +32,8 @@ class AuthController extends Controller
                 'valid'=> true,
                 'role'=> $request->user()->role,
                 'type'=> $request->user()->type,
+                'source'=> $request->user()->source,
+                'product'=> $request->user()->product,
                 'message'=> 'Token authenticated successfully.'
             ];
 

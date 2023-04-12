@@ -1,5 +1,5 @@
 <template>
-    <NavBar :active="'profile'" :role="role" class="z-0 absolute" />
+    <NavBar :active="'profile'" :role="user.role" class="z-0 absolute" />
 
     <profileMenu class="z-20 relative" />
 
@@ -41,6 +41,17 @@
 
                     <EnvelopeIcon class="md:hidden h-[20px] my-auto" />
                     <p class="my-auto text-custom-gray font-medium">{{ user.email }}</p>
+                </div>
+
+                <!-- User Product -->
+                <div class="w-[311px] md:w-full h-[48px] md:h-[64px] flex gap-8 text-[16px] text-custom-light-gray bg-white border-custom-light border-[1px] rounded-[4px] px-6">
+                    <div class="hidden h-fit w-[200px] my-auto md:flex gap-6">
+                        <BriefcaseIcon class="h-[24px] my-auto" />
+                        <p class="">Product:</p>
+                    </div>
+
+                    <BriefcaseIcon class="md:hidden h-[20px] my-auto" />
+                    <p class="my-auto text-custom-gray font-medium uppercase">{{ user.product == 'ALL' ? 'FLOOD, HOME' : user.product }}</p>
                 </div>
 
                 <!-- User Error Source -->
@@ -104,7 +115,7 @@
 </template>
 
 <script>
-import { UserIcon, ExclamationTriangleIcon, MapPinIcon, EnvelopeIcon, LockOpenIcon, LockClosedIcon } from '@heroicons/vue/24/solid'
+import { UserIcon, ExclamationTriangleIcon, MapPinIcon, EnvelopeIcon, LockOpenIcon, LockClosedIcon, BriefcaseIcon } from '@heroicons/vue/24/solid'
 import NavBar from '../components/navbar.vue'
 import textInput from '../components/textInput.vue'
 import profileMenu from '../components/profileMenu.vue'
@@ -340,7 +351,8 @@ export default {
         MapPinIcon,
         ExclamationTriangleIcon,
         LockOpenIcon,
-        LockClosedIcon
+        LockClosedIcon,
+        BriefcaseIcon
     }
 }
 </script>

@@ -9,66 +9,90 @@
 
     <!-- Create User Popup -->
     <div v-if="create" class="w-screen h-screen md:mt-[-96px] grid bg-[#3F3F3F] bg-opacity-[26%] z-50 fixed">
-        <form @submit.prevent="createUser()" class="m-auto w-[343px] md:w-[438px] h-fit grid bg-white rounded-[4px] md:rounded-[6px]">
+        <form @submit.prevent="createUser()" class="m-auto w-[343px] md:w-[500px] h-fit grid bg-white rounded-[4px] md:rounded-[6px]">
             <div class="w-full h-[56px] md:h-[68px] flow-root px-6 text-[20px] md:text-[24px] text-custom-gray font-medium bg-custom-bg border-b-[1px] border-custom-light rounded-tr-[4px] rounded-tl-[4px] md:rounded-tr-[6px] md:rounded-tl-[6px]">
                 <div class="grid w-fit h-full float-left"><p class="my-auto">Create User</p></div>
                 <button @click="create = false" class="grid w-fit h-full float-right"><XCircleIcon class="h-[24px] my-auto hover:text-custom-red" /></button>
             </div>
 
             <div class="w-full h-fit grid gap-4 px-6 my-6">
-                <textInput @inputUpdate="newInputChange" :inputValue="newUser.name" :id="'name'" :label="'Name'" />
-                <textInput @inputUpdate="newInputChange" :inputValue="newUser.email" :id="'email'" :label="'Email'" :email=true />
-
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Role <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="newUser.role"
-                        :options="roles"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select user role"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <textInput @inputUpdate="newInputChange" :inputValue="newUser.name" :id="'name'" :label="'Name'" />
+                    <textInput @inputUpdate="newInputChange" :inputValue="newUser.email" :id="'email'" :label="'Email'" :email=true />
                 </div>
 
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Error Source <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="newUser.source"
-                        :options="sources"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select allowed error source"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="role" class="text-[16px] text-custom-light-gray font-medium">Role <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="newUser.role"
+                            :options="roles"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select user role"
+                        />
+                    </div>
+
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="product" class="text-[16px] text-custom-light-gray font-medium">Prouct(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="newUser.product"
+                            :options="products"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select user product(s)"
+                        />
+                    </div>
                 </div>
 
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Error Type <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="newUser.type"
-                        :options="types"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select allowed error types"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="source" class="text-[16px] text-custom-light-gray font-medium">Error Source(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="newUser.source"
+                            :options="sources"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select error source(s)"
+                        />
+                    </div>
+
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="type" class="text-[16px] text-custom-light-gray font-medium">Error Type(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="newUser.type"
+                            :options="types"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select error type(s)"
+                        />
+                    </div>
                 </div>
 
-                <textInput @inputUpdate="newInputChange" :inputValue="newUser.password" :id="'password'" :label="'Password'" />
-                <textInput @inputUpdate="newInputChange" :inputValue="newUser.confirm_password" :id="'confirm_password'" :label="'Confirm Password'" />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <textInput @inputUpdate="newInputChange" :inputValue="newUser.password" :id="'password'" :label="'Password'" />
+                    <textInput @inputUpdate="newInputChange" :inputValue="newUser.confirm_password" :id="'confirm_password'" :label="'Confirm Password'" />
+                </div>
 
                 <input :disabled="loading" type="submit" value="Create User" class="mt-2 md:mt-4 bg-custom-blue text-white font-medium py-2 px-6 border-l-[4px] border-b-[5px] border-[#7EA9E8] active:border-custom-blue rounded-[4px] shadow-newdrop cursor-pointer">
             </div>
@@ -77,66 +101,90 @@
 
     <!-- Update User Popup -->
     <div v-if="update" class="w-screen h-screen md:mt-[-96px] grid bg-[#3F3F3F] bg-opacity-[26%] z-50 fixed">
-        <form @submit.prevent="userUpdate()" class="m-auto w-[343px] md:w-[438px] h-fit grid bg-white rounded-[4px] md:rounded-[6px]">
+        <form @submit.prevent="userUpdate()" class="m-auto w-[343px] md:w-[500px] h-fit grid bg-white rounded-[4px] md:rounded-[6px]">
             <div class="w-full h-[56px] md:h-[68px] flow-root px-6 text-[20px] md:text-[24px] text-custom-gray font-medium bg-custom-bg border-b-[1px] border-custom-light rounded-tr-[4px] rounded-tl-[4px] md:rounded-tr-[6px] md:rounded-tl-[6px]">
                 <div class="grid w-fit h-full float-left"><p class="my-auto">Updates User</p></div>
                 <button @click="update = false" class="grid w-fit h-full float-right"><XCircleIcon class="h-[24px] my-auto" /></button>
             </div>
 
             <div class="w-full h-fit grid gap-4 px-6 my-6">
-                <textInput @inputUpdate="newInputChange" :inputValue="updateUser.name" :id="'name'" :label="'Name'" />
-                <textInput @inputUpdate="newInputChange" :inputValue="updateUser.email" :id="'email'" :label="'Email'" :email=true />
-
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Role <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="updateUser.role"
-                        :options="roles"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select user role"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <textInput @inputUpdate="newInputChange" :inputValue="updateUser.name" :id="'name'" :label="'Name'" />
+                    <textInput @inputUpdate="newInputChange" :inputValue="updateUser.email" :id="'email'" :label="'Email'" :email=true />
                 </div>
 
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Error Source <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="updateUser.source"
-                        :options="sources"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select allowed error source"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="role" class="text-[16px] text-custom-light-gray font-medium">Role <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="updateUser.role"
+                            :options="roles"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select user role"
+                        />
+                    </div>
+
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="product" class="text-[16px] text-custom-light-gray font-medium">Product(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="updateUser.product"
+                            :options="products"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select user product(s)"
+                        />
+                    </div>
                 </div>
 
-                <div class="grid gap-[4px] w-full h-fit">
-                    <label for="role" class="text-[16px] text-custom-light-gray font-medium">Error Type <span class="text-custom-red">*</span></label>
-                    <VueMultiselect
-                        v-model="updateUser.type"
-                        :options="types"
-                        :searchable="false"
-                        :close-on-select="true"
-                        :allow-empty="false"
-                        :show-labels="false"
-                        label="name"
-                        :track-by="code"
-                        :block-keys="['Tab', 'Enter']"
-                        placeholder="Select allowed error types"
-                    />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="source" class="text-[16px] text-custom-light-gray font-medium">Error Source(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="updateUser.source"
+                            :options="sources"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select error source(s)"
+                        />
+                    </div>
+
+                    <div class="grid gap-[4px] w-full h-fit">
+                        <label for="type" class="text-[16px] text-custom-light-gray font-medium">Error Type(s) <span class="text-custom-red">*</span></label>
+                        <VueMultiselect
+                            v-model="updateUser.type"
+                            :options="types"
+                            :searchable="false"
+                            :close-on-select="true"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            label="name"
+                            :track-by="code"
+                            :block-keys="['Tab', 'Enter']"
+                            placeholder="Select error type(s)"
+                        />
+                    </div>
                 </div>
                 
-                <textInput @inputUpdate="newInputChange" :inputValue="updateUser.password" :id="'password'" :label="'Password'" />
-                <textInput @inputUpdate="newInputChange" :inputValue="updateUser.confirm_password" :id="'confirm_password'" :label="'Confirm Password'" />
+                <div class="grid md:grid-cols-2 gap-4">
+                    <textInput @inputUpdate="newInputChange" :inputValue="updateUser.password" :id="'password'" :label="'Password'" />
+                    <textInput @inputUpdate="newInputChange" :inputValue="updateUser.confirm_password" :id="'confirm_password'" :label="'Confirm Password'" />
+                </div>
 
                 <input :disabled="loading" type="submit" value="Update User" class="mt-2 md:mt-4 bg-custom-blue text-white font-medium py-2 px-6 border-l-[4px] border-b-[5px] border-[#7EA9E8] active:border-custom-blue rounded-[4px] shadow-newdrop cursor-pointer">
             </div>
@@ -146,7 +194,7 @@
     <div class="grid gap-6 sm:ml-64 px-4 mt-24 md:mt-0 md:px-10 h-fit w-full md:w-[84%] bg-custom-bg z-10 absolute">
         <div class="w-full h-fit grid gap-4 md:gap-0 md:flow-root">
             <div class="w-fit float-left grid">
-                <p class="text-[22px] md:text-[32px] text-custom-gray font-medium">Users</p>
+                <p class="hidden md:block text-[22px] md:text-[32px] text-custom-gray font-medium">Users</p>
                 <p class="text-[14px] md:text-[16px] text-custom-light-gray">Below you can find the full list of users,</p>
             </div>
 
@@ -166,10 +214,11 @@
         </div>
 
         <!-- Desktop Headers -->
-        <div class="hidden w-full h-fit md:grid grid-cols-7 px-6 pb-[5px] border-b-[1px] border-custom-light text-[16px] text-custom-light-gray font-medium">
+        <div class="hidden w-full h-fit md:grid grid-cols-8 px-6 pb-[5px] border-b-[1px] border-custom-light text-[16px] text-custom-light-gray font-medium">
             <p>Name</p>
             <p>Email</p>
             <p>Role</p>
+            <p>Product</p>
             <p class="col-span-2">Error Source</p>
             <p class="ml-[-10px]">Error Type</p>
         </div>
@@ -177,10 +226,11 @@
         <div class="w-full h-[568px] md:h-[600px] grid mb-12 md:mb-0 bg-transparent overflow-y-scroll scrollbar">
             <div class="h-fit grid gap-4">
                 <!-- Desktop View -->
-                <div v-for="(user, index) in filterView" :key="index" class="hidden w-full h-[48px] md:grid grid-cols-7 px-6 text-[14px] text-custom-gray bg-white border-[1px] border-cusom-light rounded-[4px]">
+                <div v-for="(user, index) in filterView" :key="index" class="hidden w-full h-[48px] md:grid grid-cols-8 px-6 text-[14px] text-custom-gray bg-white border-[1px] border-cusom-light rounded-[4px]">
                     <p class="my-auto mr-4 truncate">{{ user.name }}</p>
                     <p class="my-auto mr-4 truncate">{{ user.email }}</p>
                     <div class="w-fit h-[28px] grid my-auto px-4 bg-custom-dark-blue rounded-[2px]"><p class="m-auto text-[14px] text-white font-medium">{{ user.role }}</p></div>
+                    <p class="my-auto mr-4 font-medium truncate">{{ user.product == 'ALL' ? 'FLOOD, HOME' : user.product }}</p>
                     <p :class="user.source == 'MGA' ? 'text-custom-red' : 'text-custom-blue'" class="col-span-2 my-auto mr-4  font-medium truncate">{{ user.source == 'ALL' ? 'RocketAutomation, RocketMGA' : user.source == 'MGA' ? 'RocketMGA' : 'RocketAutomation'}}</p>
                     <p class="my-auto mr-4 font-medium truncate">{{ user.type == "ALL" ? "API, BOT" : user.type }}</p>
                     <button :disabled="update" @click="showUpdate(user)" class="w-fit h-fit grid my-auto bg-custom-blue disabled:opacity-50 text-white font-medium py-[4px] px-6 border-l-[4px] border-b-[5px] border-[#7EA9E8] active:border-custom-blue rounded-[4px] shadow-newdrop disabled:cursor-not-allowed">Update User</button>
@@ -271,6 +321,20 @@ export default{
                     code: "BOT"
                 }
             ],
+            products: [
+                {
+                    name: "FLOOD, HOME",
+                    code: "ALL"
+                },
+                {
+                    name: "FLOOD",
+                    code: "FLOOD"
+                },
+                {
+                    name: "HOME",
+                    code: "HOME"
+                }
+            ],
             users : [],
             filterView: [],
             newUser: {
@@ -280,7 +344,8 @@ export default{
                 password: '',
                 confirm_password: '',
                 source: '',
-                type: ''
+                type: '',
+                product: ''
             },
             newErrors: [
                 {
@@ -366,6 +431,12 @@ export default{
                 }
             })
 
+            this.products.forEach(product => {
+                if(product.code == user.product){
+                    this.updateUser.product = product
+                }
+            })
+
             this.update = true
         },
         newInputChange(id, value, errors){
@@ -439,6 +510,7 @@ export default{
                 this.newUser.role = this.newUser.role.code
                 this.newUser.source = this.newUser.source.code
                 this.newUser.type = this.newUser.type.code
+                this.newUser.product = this.newUser.product.code
 
                 await axios.post('/api/register', this.newUser)
                 .then(response => {
@@ -536,6 +608,7 @@ export default{
                 this.updateUser.role = this.updateUser.role.code
                 this.updateUser.source = this.updateUser.source.code
                 this.updateUser.type = this.updateUser.type.code
+                this.updateUser.product = this.updateUser.product.code
 
                 let data = {}
 

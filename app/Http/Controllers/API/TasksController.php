@@ -9,7 +9,11 @@ use App\Models\tasks;
 use App\Models\User;
 use App\Models\Notifications;
 use App\Models\Notes;
+use App\Models\Uploads;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class TasksController extends Controller
 {   
@@ -32,6 +36,47 @@ class TasksController extends Controller
         $notification->save();
 
         return response()->json(['success'=> true], 200);
+    }
+
+    // Get Error Attachments
+    public function uploads($app_id, $carrier){
+        $uploads = Uploads::where('app_id', $app_id)->where('carrier', $carrier)->where('note', null)->get();
+
+        return response()->json(['success'=>true, 'uploads'=>$uploads]);
+    }
+
+    // Get Note Attachments
+    public function note_uploads($note_id){
+        $uploads = Uploads::where('note', $note_id)->get();
+
+        return response()->json(['success'=>true, 'uploads'=>$uploads]);
+    }
+
+    // Delete Attachment
+    public function delete_upload($id){
+        $upload = Uploads::find($id);
+
+        Storage::delete('public/uploads/'.$upload->name);
+        $upload->delete();
+
+        return response()->json(['success'=>true, 'message'=>'Upload deleted sucessfully.'], 200);
+    }
+
+    // Save Note Attachment
+    public function note_upload(Request $request){
+        foreach ($request->uploads as $upload){
+            $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+
+            $fileUpload = new Uploads();
+            $fileUpload->name = $upload->getClientOriginalName();
+            $fileUpload->path = '/storage/'.$file_path;
+            $fileUpload->app_id = $request->app_id;
+            $fileUpload->carrier = $request->carrier;
+            $fileUpload->note = $request->note;
+            $fileUpload->save();
+        }
+
+        return response()->json(['success'=>true, 'message'=>'File Uploads Successful.'], 200);
     }
 
     // Get Error Notes
@@ -73,38 +118,67 @@ class TasksController extends Controller
     }
 
     // Log Test
-    public function test(Request $request, $id){
+    public function log_test(Request $request, $id){
         $task = tasks::find($id);
         $task->tests = $task->tests + 1;
         $task->save();
+        $status = $request->passed == 'true' ? "PASSED" : "FAILED";
 
         $note = new Notes();
         $note->app_id = $task->app_id;
         $note->carrier = $task->carrier;
         $note->user = $request->user()->name;
-        $note->note = "Test ".$task->tests." Completion Log: ".$request->user()->name." marked this test as completed on ".Carbon::now()->toDayDateTimeString().", please provide more details below:";
-        $note->test = true;
+        $note->note = "Error Test Log: Test ".$task->tests." was marked as ".$status." by ".$request->user()->name." on ".Carbon::now()->toDayDateTimeString()."\r\n\r\n"."Test Details: ".$request->details."\r\n\r\n".($request->has('uploads') ? "Please see the addtional reference material related to this error, count:".count($request->uploads) : "");
+        $note->disabled = true;
         $note->save();
 
-        return response()->json(['success'=> true], 200);
+        if($request->has('uploads') && count($request->uploads) > 0){
+            foreach($request->uploads as $upload){
+                $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+        
+                $fileUpload = new Uploads();
+                $fileUpload->name = $upload->getClientOriginalName();
+                $fileUpload->path = '/storage/'.$file_path;
+                $fileUpload->app_id = $task->app_id;
+                $fileUpload->carrier = $task->carrier;
+                $fileUpload->note = $note->id;
+                $fileUpload->save();
+            }
+        }
     }
 
     // Update Task Status
     public function status(Request $request, $id){
         $task = tasks::find($id);
 
-        // Updating from Debugging Status
+        // Updating from Debugging Status and API Error
         if($task->status == 'debug'){
             $task->status = 'update';
+            $task->cause = $request->cause;
+            $task->updates = $request->updates;
             $task->save();
 
             $note = new Notes();
             $note->app_id = $task->app_id;
             $note->carrier = $task->carrier;
             $note->user = $request->user()->name;
-            $note->note = "Status Update Log: This error's status was changed from Debugging to Implement Updates by ".$request->user()->name." on ".Carbon::now()->toDayDateTimeString();
+            $note->note = "Status Update Log: This error's status was changed from Debugging to Implement Updates by ".$request->user()->name." on ".Carbon::now()->toDayDateTimeString()."\r\n\r\n"."Cause of the Error: ".$request->cause."\r\n\r\n"."Updates to be Implemented: ".$request->updates."\r\n\r\n".($request->has('uploads') ? "Please see the addtional reference material related to this error, count:".count($request->uploads) : "");
             $note->disabled = true;
             $note->save();
+
+            if($request->has('uploads') && count($request->uploads) > 0){
+                foreach($request->uploads as $upload){
+                    $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+            
+                    $fileUpload = new Uploads();
+                    $fileUpload->name = $upload->getClientOriginalName();
+                    $fileUpload->path = '/storage/'.$file_path;
+                    $fileUpload->app_id = $task->app_id;
+                    $fileUpload->carrier = $task->carrier;
+                    $fileUpload->note = $note->id;
+                    $fileUpload->save();
+                }
+            }
         }
         // Updating from Implementing Updates Status
         elseif($task->status == 'update'){
@@ -134,6 +208,37 @@ class TasksController extends Controller
             $note->disabled = true;
             $note->save();
         }
+        // Updating from DigiPrompt to Fixed Status
+        elseif($task->status == 'digiprompt'){
+            $task->status = 'fixed';
+            $task->fixed = true;
+            $task->fixed_date = Carbon::now();
+            $task->cause = $request->cause;
+            $task->updates = $request->updates;
+            $task->save();
+
+            $note = new Notes();
+            $note->app_id = $task->app_id;
+            $note->carrier = $task->carrier;
+            $note->user = $request->user()->name;
+            $note->note = "Status Update Log: This error's status was changed from DigiPrompt Queue to Fixed by ".$request->user()->name." on ".Carbon::now()->toDayDateTimeString()."\r\n\r\n"."Cause of the Error: ".$request->cause."\r\n\r\n"."Updates Implemented: ".$request->updates."\r\n\r\n".($request->has('uploads') ? "Please see the addtional reference material related to this error, count:".count($request->uploads) : "");
+            $note->disabled = true;
+            $note->save();
+
+            if($request->has('uploads') && count($request->uploads) > 0){
+                foreach($request->uploads as $upload){
+                    $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+            
+                    $fileUpload = new Uploads();
+                    $fileUpload->name = $upload->getClientOriginalName();
+                    $fileUpload->path = '/storage/'.$file_path;
+                    $fileUpload->app_id = $task->app_id;
+                    $fileUpload->carrier = $task->carrier;
+                    $fileUpload->note = $note->id;
+                    $fileUpload->save();
+                }
+            }
+        }
     }
 
     // Add Tasks/Errors for Application
@@ -151,26 +256,6 @@ class TasksController extends Controller
 
             return response()->json($response, 400);
         }
-
-        $carrierTypes = [
-            "aon"=> 'API',
-            "beyond"=> 'API',
-            "cat"=> 'API',
-            "dual"=> 'API',
-            "flow"=> 'API',
-            "frs"=> 'BOT',
-            "hippo"=> 'API',
-            "johnson"=> 'API',
-            "neptune"=> 'API',
-            "palomar"=> 'API',
-            "pmf"=> 'BOT',
-            "sterling"=> 'API',
-            "superior"=> 'BOT',
-            "tower"=> 'BOT',
-            "wright-resi"=> 'API',
-            "wright-nfip"=> 'API',
-            "wright-hiscox"=> 'API',
-        ];
 
         $source = "";
         if(str_contains($request->app_id, "RFAA")){
@@ -191,11 +276,21 @@ class TasksController extends Controller
             // Set Task Source based on Appliction ID
             $error['source'] = $source;
 
-            // Set Task Type based on Carrier
-            $error['type'] = $carrierTypes[$error['carrier']];
+            // Set Task Product
+            if($request->has('product')){
+                $error['product'] = $request->product;
+
+                if($request->product == "HOME"){
+                    $error['carrier'] = $error['rater']."-".$error['carrier'];
+                }
+            }
 
             // Set Task Status to Debugging
-            $error['status'] = "debug";
+            if($error['type'] == 'API'){
+                $error['status'] = "debug";
+            }elseif($error['type'] == 'BOT'){
+                $error['status'] = "digiprompt";
+            }
 
             // Assign task to a user
             $user = User::where('role', 'user')
@@ -213,6 +308,20 @@ class TasksController extends Controller
 
             $task = tasks::create($error);
             $task->save();
+
+            // Save Uploaded Files
+            if(array_key_exists('uploads', $error) && count($error['uploads']) > 0){
+                foreach ($error['uploads'] as $upload){
+                    $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+
+                    $fileUpload = new Uploads();
+                    $fileUpload->name = $upload->getClientOriginalName();
+                    $fileUpload->path = '/storage/'.$file_path;
+                    $fileUpload->app_id = $request->app_id;
+                    $fileUpload->carrier = $error['carrier'];
+                    $fileUpload->save();
+                }
+            }
         }
 
         // Create  Application Notification
@@ -233,17 +342,62 @@ class TasksController extends Controller
 
     // Get Data for Specific Dashboard/Tasks Views
     public function index(Request $request, $filter = null){
+        $type = $request->user()->type;
+        $source = $request->user()->source;
+        $product = $request->user()->product;
+
         if($filter == null){
             return 'no filter';
         } elseif($filter == 'dashboard'){
             // Get all Notifications
-            $quick_notifications = Notifications::orderBy('created_at', 'desc')->take(4)->get();
-            $unread_notifications = Notifications::where('read', false)->orderBy('created_at', 'desc')->get();
+            if($source == "ALL"){
+                $quick_notifications = Notifications::orderBy('created_at', 'desc')->take(4)->get();
+                $unread_notifications = Notifications::where('read', false)->orderBy('created_at', 'desc')->get();
+            } else {
+                $quick_notifications = Notifications::where('source', $source)->orderBy('created_at', 'desc')->take(4)->get();
+                $unread_notifications = Notifications::where('read', false)->where('source', $source)->orderBy('created_at', 'desc')->get();
+            }
 
             $today = date('Y-m-d');
 
-            $quick_tasks = tasks::orderBy('created_at', 'desc')->take(5)->get();
-            $tasks = tasks::orderBy('created_at', 'desc')->get();
+            if($source == "ALL"){
+                if($product == "ALL"){
+                    if($type == "ALL"){
+                        $quick_tasks = tasks::orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::orderBy('created_at', 'desc')->get();
+                    }else {
+                        $quick_tasks = tasks::where('type', $type)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('type', $type)->orderBy('created_at', 'desc')->get();
+                    }
+                } else{
+                    if($type == "ALL"){
+                        $quick_tasks = tasks::where('product', $product)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('product', $product)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $quick_tasks = tasks::where('product', $product)->where('type', $type)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('product', $product)->where('type', $type)->orderBy('created_at', 'desc')->get();
+                    }
+                }
+            }else {
+                if($product == "ALL"){
+                    if($type == "ALL"){
+                        $quick_tasks = tasks::where('source', $source)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('source', $source)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $quick_tasks = tasks::where('source', $source)->where('type', $type)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('source', $source)->where('type', $type)->orderBy('created_at', 'desc')->get();
+                    }
+                } else{
+                    if($type == "ALL"){
+                        $quick_tasks = tasks::where('source', $source)->where('product', $product)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('source', $source)->where('product', $product)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $quick_tasks = tasks::where('source', $source)->where('product', $product)->where('type', $type)->orderBy('created_at', 'desc')->take(5)->get();
+                        $tasks = tasks::where('source', $source)->where('product', $product)->where('type', $type)->orderBy('created_at', 'desc')->get();
+                    }
+                }
+            }
+
             $tasks_today = 0;
             $tasks_pending = 0;
             $tasks_fixed = 0;
@@ -272,7 +426,35 @@ class TasksController extends Controller
 
             return response()->json($response, 200);
         } else {
-            $tasks = tasks::where('status', $filter)->orderBy('created_at', 'desc')->get();
+            if($source == "ALL"){
+                if($product == "ALL"){
+                    if($type == "ALL"){
+                        $tasks = tasks::where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $tasks = tasks::where('type', $type)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }
+                } else{
+                    if($type == "ALL"){
+                        $tasks = tasks::where('product', $product)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $tasks = tasks::where('product', $product)->where('type', $type)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }
+                }
+            }else {
+                if($product == "ALL"){
+                    if($type == "ALL"){
+                        $tasks = tasks::where('source', $source)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $tasks = tasks::where('source', $source)->where('type', $type)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }
+                } else{
+                    if($type == "ALL"){
+                        $tasks = tasks::where('source', $source)->where('product', $product)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }else {
+                        $tasks = tasks::where('source', $source)->where('product', $product)->where('type', $type)->where('status', $filter)->orderBy('created_at', 'desc')->get();
+                    }
+                }
+            }
 
             $response = [
                 'success'=> true,

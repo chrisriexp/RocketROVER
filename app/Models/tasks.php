@@ -19,6 +19,7 @@ class tasks extends Model
         'desc',
         'status',
         'notes',
-        'fixed'
+        'fixed',
+        'product'
     ];
 }

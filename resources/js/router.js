@@ -78,6 +78,8 @@ async function validateAccessToken(to, from, next) {
         if (response.data.valid) {
             to.meta.role = response.data.role;
             to.meta.type = response.data.type;
+            to.meta.source = response.data.source;
+            to.meta.product = response.data.product;
 
             if(to.meta.admin){
                 if(to.meta.role == 'admin' || to.meta.role == 'super-admin'){
