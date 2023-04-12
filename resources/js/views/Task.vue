@@ -138,7 +138,7 @@
 
                 <p class="text-[16px] text-custom-light-gray font-medium">Carrier Name</p>
                 <div class="w-full md:w-[200px] h-[40px] bg-white grid px-4 border-[1px] border-custom-light rounded-[4px]">
-                    <p class="my-auto text-[15px] text-custom-gray font-medium">{{ product == "FLOOD" ? carriers[errors[selected_error].carrier].name : carriers[errors[selected_error].carrier.substring(3)].name }}</p>
+                    <p class="my-auto text-[15px] text-custom-gray font-medium truncate">{{ product == "FLOOD" ? carriers[errors[selected_error].carrier].name : carriers[errors[selected_error].carrier.substring(3)].name }}</p>
                 </div>
             </div>
 
