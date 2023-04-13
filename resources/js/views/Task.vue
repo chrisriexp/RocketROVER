@@ -237,7 +237,7 @@
                             <p class="text-[16px] text-custom-light-gray font-medium">Attachment(s)</p>
                             <div class="grid h-[127px] overflow-y-scroll">
                                 <div class="h-fit grid">
-                                    <a v-for="(upload, index) in error_uploads" :key="index" target="_blank" :href="'http://'+baseURL+upload.path" class="w-fit text-custom-blue truncate underline hover:font-medium">{{ upload.name }}</a>
+                                    <a v-for="(upload, index) in error_uploads" :key="index" target="_blank" :href="'https://'+baseURL+upload.path" class="w-fit text-custom-blue truncate underline hover:font-medium">{{ upload.name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -314,7 +314,7 @@
                                 <div class="grid h-fit">
                                     <div v-for="(upload, index) in note_uploads" :key="index" class="w-fit h-fit flex gap-2">
                                         <XCircleIcon @click="removeUpload(index, 'note')" v-if="error_notes[selected_note].user == user && !error_notes[selected_note].disabled" class="my-auto h-[24px] text-custom-gray hover:text-custom-red cursor-pointer" />
-                                        <a target="_blank" :href="'http://'+baseURL+upload.path" class="text-custom-blue underline">{{ upload.name }}</a>
+                                        <a target="_blank" :href="'https://'+baseURL+upload.path" class="text-custom-blue underline">{{ upload.name }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -599,17 +599,17 @@ export default {
 
             let uploads = []
 
-            this.note_uploads.forEach(upload => {
-                if(!upload.id){
-                    uploads.push(upload)
-                }
-            })
-
             const header = {
                 headers: {'content-type': 'multipart/form-data'}
             }
 
             if(uploads.length > 0){
+                this.note_uploads.forEach(upload => {
+                    if(!upload.id){
+                        uploads.push(upload)
+                    }
+                })
+
                 await axios.post('/api/note/upload', {
                     "uploads": uploads,
                     "app_id": this.app_id,

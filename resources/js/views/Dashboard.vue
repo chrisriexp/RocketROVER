@@ -51,7 +51,7 @@
                     <p class="h-fit text-[20px] md:text-[24px] text-custom-gray font-medium my-auto">Notifications</p>
 
                     <div class="my-auto h-fit flow-root text-custom-blue">
-                        <p @click="notificationPopup = true" class="float-right flex gap-2 cursor-pointer">View <span class="hidden md:block">all</span> <ArrowRightCircleIcon class="h-[24px]" /></p>
+                        <p @click="notificationPopup = true" class="float-right flex gap-2 cursor-pointer">View <span class="hidden md:block">all unread</span> <ArrowRightCircleIcon class="h-[24px]" /></p>
                     </div>
                 </div>
 
