@@ -503,7 +503,7 @@ export default {
                 const type = e.target.files[key].name.split('.').pop()
 
                 if(upload == 'note'){
-                    const newFile = new File([e.target.files[key]], this.app_id+"_"+this.errors[this.selected_error].carrier+"_upload"+this.note_uploads.length+"."+type)
+                    const newFile = new File([e.target.files[key]], this.app_id+"_"+this.errors[this.selected_error].carrier+"_upload"+this.note_uploads.length +"."+type)
                     this.note_uploads.push(newFile)
                 }else if(upload == 'update'){
                     const newFile = new File([e.target.files[key]], this.app_id+"_"+this.errors[this.selected_error].carrier+"_update"+this.update_uploads.length+"."+type)
@@ -519,7 +519,7 @@ export default {
                 const type = e.clipboardData.items[0].getAsFile().name.split('.').pop()
 
                 if(upload == 'note'){
-                    const newFile = new File([e.clipboardData.items[0].getAsFile()], this.app_id+"_"+this.errors[this.selected_error].carrier+"_upload"+this.update_uploads.length+"."+type)
+                    const newFile = new File([e.clipboardData.items[0].getAsFile()], this.app_id+"_"+this.errors[this.selected_error].carrier+"_upload"+this.note_uploads.length+"."+type)
                     this.note_uploads.push(newFile)
                 }
                 else if(upload == 'update'){
@@ -555,11 +555,9 @@ export default {
                 created_at: moment(new Date).format('MM/DD/YYYY hh:mm A'),
                 test: false,
                 disabled: false
-            })
+            }) 
 
-            const index = this.error_notes.length - 1
-
-            this.selected_note = index
+            this.selected_note = this.error_notes.length - 1
             this.note_uploads = []
 
             this.loading = false
@@ -587,9 +585,9 @@ export default {
             this.loading = true
 
             if(this.error_notes[this.selected_note].id){
-                await axios.put('/api/note/'+this.error_notes[this.selected_note].id, this.error_notes[this.selecselected_noteted_error])
+                await axios.put('/api/note/'+this.error_notes[this.selected_note].id, this.error_notes[this.selected_note])
             } else {
-                await axios.post('/api/note/', this.error_notes[this.selected_note])
+                await axios.post('/api/note', this.error_notes[this.selected_note])
             }
 
             await axios.get('/api/notes/'+this.app_id+'/'+this.errors[this.selected_error].carrier)
@@ -599,17 +597,19 @@ export default {
 
             let uploads = []
 
-            const header = {
-                headers: {'content-type': 'multipart/form-data'}
-            }
-
-            if(uploads.length > 0){
+            if(this.note_uploads.length > 0){
                 this.note_uploads.forEach(upload => {
                     if(!upload.id){
                         uploads.push(upload)
                     }
                 })
+            }
 
+            const header = {
+                headers: {'content-type': 'multipart/form-data'}
+            }
+
+            if(uploads.length > 0){
                 await axios.post('/api/note/upload', {
                     "uploads": uploads,
                     "app_id": this.app_id,

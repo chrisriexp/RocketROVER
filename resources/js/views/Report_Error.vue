@@ -196,7 +196,28 @@ export default {
     },
     methods: {
         clickUpload(index){
-            document.getElementById(`error${index}uploads`).click();
+            if(this.floodProduct){
+                if(!this.form.app_id || !this.form.errors[index].carrier){
+                    this.$alert({
+                        title: 'Upload Error',
+                        text: 'Please enter a Application ID and Carrier before you upload a file',
+                        type: 'warn'
+                    })
+                }else{
+                    document.getElementById(`error${index}uploads`).click();
+                }
+            }else{
+                if(!this.form.app_id || !this.form.errors[index].carrier || !this.form.errors[index].rater){
+                    this.$alert({
+                        title: 'Upload Error',
+                        text: 'Please enter a Application ID, Rater, and Carrier before you upload a file',
+                        type: 'warn'
+                    })
+                }else{
+                    document.getElementById(`error${index}uploads`).click();
+                }
+            }
+            
         },
         removeUpload(index, uploadIndex){
             this.form.errors[index].uploads.splice(uploadIndex, 1)
@@ -227,10 +248,33 @@ export default {
         },
         async pasteEvent(e, index){
             if(e.clipboardData.items[0].getAsFile()){
-                const type = e.clipboardData.items[0].getAsFile().name.split('.').pop()
-                const newFile = new File([e.clipboardData.items[0].getAsFile()], this.form.app_id+this.form.errors[index].rater+this.form.errors[index].carrier.code+"upload"+this.form.errors[index].uploads.length+"."+type)
+                if(this.floodProduct){
+                    if(!this.form.app_id || !this.form.errors[index].carrier){
+                        this.$alert({
+                            title: 'Upload Error',
+                            text: 'Please enter a Application ID and Carrier before you upload a file',
+                            type: 'warn'
+                        })
+                    }else{
+                        const type = e.clipboardData.items[0].getAsFile().name.split('.').pop()
+                        const newFile = new File([e.clipboardData.items[0].getAsFile()], this.form.app_id+this.form.errors[index].rater+this.form.errors[index].carrier.code+"upload"+this.form.errors[index].uploads.length+"."+type)
 
-                this.form.errors[index].uploads.push(newFile)
+                        this.form.errors[index].uploads.push(newFile)
+                    }
+                }else{
+                    if(!this.form.app_id || !this.form.errors[index].carrier || !this.form.errors[index].rater){
+                        this.$alert({
+                            title: 'Upload Error',
+                            text: 'Please enter a Application ID, Rater, and Carrier before you upload a file',
+                            type: 'warn'
+                        })
+                    }else{
+                        const type = e.clipboardData.items[0].getAsFile().name.split('.').pop()
+                        const newFile = new File([e.clipboardData.items[0].getAsFile()], this.form.app_id+this.form.errors[index].rater+this.form.errors[index].carrier.code+"upload"+this.form.errors[index].uploads.length+"."+type)
+
+                        this.form.errors[index].uploads.push(newFile)
+                    }
+                }
             }
         },
         async submitError(){

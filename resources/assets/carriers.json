@@ -511,6 +511,14 @@
             "MGA": null
         }
     },
+    "safepoint": {
+        "name": "Safepoint",
+        "type": "BOT",
+        "backend": {
+            "RA": "https://agent.rocketflood.com/backend/api/bot/flood/get-applications?application_id=",
+            "MGA": null
+        }
+    },
     "sagesure": {
         "name": "SageSure Companies",
         "type": "BOT",
