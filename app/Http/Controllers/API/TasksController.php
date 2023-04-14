@@ -65,10 +65,10 @@ class TasksController extends Controller
     // Save Note Attachment
     public function note_upload(Request $request){
         foreach ($request->uploads as $upload){
-            $file_path = $upload->storeAs('uploads', $upload->getClientOriginalName(), 'public');
+            $file_path = $upload->storeAs('uploads', $request->note."_".$upload->getClientOriginalName(), 'public');
 
             $fileUpload = new Uploads();
-            $fileUpload->name = $upload->getClientOriginalName();
+            $fileUpload->name = $request->note."_".$upload->getClientOriginalName();
             $fileUpload->path = '/storage/'.$file_path;
             $fileUpload->app_id = $request->app_id;
             $fileUpload->carrier = $request->carrier;

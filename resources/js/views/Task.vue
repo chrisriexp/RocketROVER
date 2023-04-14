@@ -588,6 +588,7 @@ export default {
                 await axios.put('/api/note/'+this.error_notes[this.selected_note].id, this.error_notes[this.selected_note])
             } else {
                 await axios.post('/api/note', this.error_notes[this.selected_note])
+                this.selected_note = 0
             }
 
             await axios.get('/api/notes/'+this.app_id+'/'+this.errors[this.selected_error].carrier)
